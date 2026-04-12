@@ -1,0 +1,18 @@
+fastapi==0.115.6
+uvicorn==0.34.0
+python-dotenv==1.0.1
+python-multipart==0.0.20
+pydantic-settings==2.7.1
+
+# LLM
+litellm==1.55.10
+
+# RAG
+llama-index-core==0.12.12
+llama-index-readers-file==0.4.4
+llama-index-embeddings-huggingface==0.5.2
+chromadb==0.6.3
+sentence-transformers==3.4.1
+
+# Supabase
+supabase==2.11.0
