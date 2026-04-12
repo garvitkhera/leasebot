@@ -1,18 +1,12 @@
 from app.rag.store import get_collection
-from app.rag.ingest import get_embed_model
+from app.rag.ingest import get_embedding
 
 
-def query_documents(question: str, top_k: int = 5) -> list[dict]:
-    """Query ChromaDB for relevant chunks.
-
-    Returns list of {text, source, score}
-    """
-    embed_model = get_embed_model()
-    query_embedding = embed_model.get_text_embedding(question)
+def query_documents(question, top_k=5):
+    query_embedding = get_embedding(question)
 
     collection = get_collection()
 
-    # check if collection has any docs
     if collection.count() == 0:
         return []
 
@@ -27,14 +21,13 @@ def query_documents(question: str, top_k: int = 5) -> list[dict]:
         chunks.append({
             "text": results["documents"][0][i],
             "source": results["metadatas"][0][i].get("filename", "unknown"),
-            "score": 1 - results["distances"][0][i],  # cosine distance → similarity
+            "score": 1 - results["distances"][0][i],
         })
 
     return chunks
 
 
-def build_context(chunks: list[dict], max_chars: int = 4000) -> str:
-    """Build a context string from retrieved chunks."""
+def build_context(chunks, max_chars=4000):
     if not chunks:
         return "No relevant documents found."
 
@@ -43,9 +36,7 @@ def build_context(chunks: list[dict], max_chars: int = 4000) -> str:
     for chunk in chunks:
         if total_chars + len(chunk["text"]) > max_chars:
             break
-        context_parts.append(
-            f"[Source: {chunk['source']}]\n{chunk['text']}"
-        )
+        context_parts.append(f"[Source: {chunk['source']}]\n{chunk['text']}")
         total_chars += len(chunk["text"])
 
     return "\n\n---\n\n".join(context_parts)

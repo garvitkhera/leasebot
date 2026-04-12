@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     chroma_collection: str = "lease_docs"
 
     # Embeddings (free local model)
-    embedding_model: str = "BAAI/bge-small-en-v1.5"
+    # embedding_model: str = "BAAI/bge-small-en-v1.5"
 
     # App
     app_name: str = "LeaseBot"
